@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-with-calendar",
+  "name": "roomsync-fixed-calendar",
   "version": "1.0.0",
   "private": true,
   "dependencies": {

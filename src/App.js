@@ -3,8 +3,8 @@ import { format } from "date-fns";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import '@fullcalendar/common/main.css';
-import '@fullcalendar/daygrid/main.css';
+import '@fullcalendar/react/dist/vdom';
+import '@fullcalendar/daygrid/index.css';
 
 export default function RoomSyncPrototype() {
   const [reservations, setReservations] = useState([]);
@@ -14,7 +14,6 @@ export default function RoomSyncPrototype() {
 
   const API_URL = "http://localhost:4000/reservations";
 
-  // 미리 등록된 객실 목록
   const roomOptions = [
     "별관101호", "별관102호", "별관201호", "별관202호", "별관301호", "별관302호",
     "본관201호", "본관202호", "본관203호", "본관205호",
@@ -165,4 +164,4 @@ export default function RoomSyncPrototype() {
       </div>
     </div>
   );
-}
+} 
