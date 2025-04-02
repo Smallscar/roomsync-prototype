@@ -3,8 +3,8 @@ import { format } from "date-fns";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import '@fullcalendar/react/dist/vdom';
-import '@fullcalendar/daygrid/index.css';
+import '@fullcalendar/common/main.css';
+import '@fullcalendar/daygrid/main.css';
 
 export default function RoomSyncPrototype() {
   const [reservations, setReservations] = useState([]);
@@ -164,4 +164,4 @@ export default function RoomSyncPrototype() {
       </div>
     </div>
   );
-} 
+}
