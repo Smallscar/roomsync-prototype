@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-updated",
+  "name": "roomsync-htmlui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
