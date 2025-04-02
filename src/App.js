@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 
-export default function App() {
+export default function RoomSyncPrototype() {
   const [reservations, setReservations] = useState([]);
   const [form, setForm] = useState({ name: "", date: "", room: "", platform: "" });
   const [error, setError] = useState("");
+
+  // 미리 등록된 객실 목록
+  const roomOptions = ["별관101호", "별관102호", "별관201호", "별관202호", "별관301호", "별관302호", "본관201호", "본관202호", "본관203호", "본관205호", "본관301호", "본관302호", "본관305호", "본관401호", "본관402호", "본관405호","펜션 전체"];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,25 +30,56 @@ export default function App() {
   };
 
   return (
-    <div style={{ maxWidth: "600px", margin: "auto", padding: "1rem" }}>
-      <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>RoomSync - 예약 관리</h1>
-      <div style={{ marginBottom: "1rem" }}>
-        <input placeholder="이름" name="name" value={form.name} onChange={handleChange} style={{ display: "block", marginBottom: "0.5rem", width: "100%" }} />
-        <input type="date" name="date" value={form.date} onChange={handleChange} style={{ display: "block", marginBottom: "0.5rem", width: "100%" }} />
-        <input placeholder="객실명" name="room" value={form.room} onChange={handleChange} style={{ display: "block", marginBottom: "0.5rem", width: "100%" }} />
-        <input placeholder="플랫폼 (예: 에어비앤비)" name="platform" value={form.platform} onChange={handleChange} style={{ display: "block", marginBottom: "0.5rem", width: "100%" }} />
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button onClick={handleAdd}>예약 추가</button>
-      </div>
-      <div>
+    <div className="p-4 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4">RoomSync - 예약 관리</h1>
+
+      <Card className="mb-4">
+        <CardContent className="space-y-2">
+          <Input
+            placeholder="이름"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+          />
+          <Input
+            type="date"
+            name="date"
+            value={form.date}
+            onChange={handleChange}
+          />
+          <select
+            name="room"
+            value={form.room}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+          >
+            <option value="">객실 선택</option>
+            {roomOptions.map((room, idx) => (
+              <option key={idx} value={room}>{room}</option>
+            ))}
+          </select>
+          <Input
+            placeholder="플랫폼 (예: 에어비앤비)"
+            name="platform"
+            value={form.platform}
+            onChange={handleChange}
+          />
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <Button onClick={handleAdd}>예약 추가</Button>
+        </CardContent>
+      </Card>
+
+      <div className="space-y-2">
         {reservations.length === 0 ? (
-          <p style={{ color: "gray" }}>등록된 예약이 없습니다.</p>
+          <p className="text-gray-500">등록된 예약이 없습니다.</p>
         ) : (
           reservations.map((r, i) => (
-            <div key={i} style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "0.5rem", marginBottom: "0.5rem" }}>
-              <p><strong>{r.name}</strong> ({r.platform})</p>
-              <p>{r.room} - {format(new Date(r.date), "yyyy-MM-dd")}</p>
-            </div>
+            <Card key={i}>
+              <CardContent>
+                <p><strong>{r.name}</strong> ({r.platform})</p>
+                <p>{r.room} - {format(new Date(r.date), "yyyy-MM-dd")}</p>
+              </CardContent>
+            </Card>
           ))
         )}
       </div>
