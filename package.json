@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-calendar-final-sure",
+  "name": "roomsync-calendar-vercel-fixed-v5",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -8,9 +8,10 @@
     "react-dom": "^18.0.0",
     "react-scripts": "5.0.1",
     "date-fns": "^2.30.0",
-    "@fullcalendar/react": "^6.1.8",
-    "@fullcalendar/daygrid": "^6.1.8",
-    "@fullcalendar/interaction": "^6.1.8"
+    "@fullcalendar/react": "^5.11.3",
+    "@fullcalendar/daygrid": "^5.11.3",
+    "@fullcalendar/interaction": "^5.11.3",
+    "@fullcalendar/common": "^5.11.3"
   },
   "scripts": {
     "start": "react-scripts start",
