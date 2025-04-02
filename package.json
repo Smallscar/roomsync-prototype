@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-verified-working",
+  "name": "roomsync-stable-with-fetch-guard",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
