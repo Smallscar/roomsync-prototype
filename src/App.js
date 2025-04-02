@@ -5,6 +5,7 @@ export default function RoomSyncPrototype() {
   const [reservations, setReservations] = useState([]);
   const [form, setForm] = useState({ name: "", date: "", room: "", platform: "" });
   const [error, setError] = useState("");
+  const [editIndex, setEditIndex] = useState(null);
 
   // 미리 등록된 객실 목록
   const roomOptions = [
@@ -22,14 +23,35 @@ export default function RoomSyncPrototype() {
   const handleAdd = () => {
     setError("");
     const exists = reservations.some(
-      (r) => r.date === form.date && r.room.toLowerCase() === form.room.toLowerCase()
+      (r, index) => index !== editIndex && r.date === form.date && r.room.toLowerCase() === form.room.toLowerCase()
     );
     if (exists) {
       setError("중복 예약! 해당 날짜에 이미 예약이 있습니다.");
       return;
     }
-    setReservations([...reservations, form]);
+    if (editIndex !== null) {
+      const updated = [...reservations];
+      updated[editIndex] = form;
+      setReservations(updated);
+      setEditIndex(null);
+    } else {
+      setReservations([...reservations, form]);
+    }
     setForm({ name: "", date: "", room: "", platform: "" });
+  };
+
+  const handleEdit = (index) => {
+    setForm(reservations[index]);
+    setEditIndex(index);
+  };
+
+  const handleDelete = (index) => {
+    const updated = reservations.filter((_, i) => i !== index);
+    setReservations(updated);
+    if (editIndex === index) {
+      setForm({ name: "", date: "", room: "", platform: "" });
+      setEditIndex(null);
+    }
   };
 
   return (
@@ -74,7 +96,7 @@ export default function RoomSyncPrototype() {
           className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
           onClick={handleAdd}
         >
-          예약 추가
+          {editIndex !== null ? "예약 수정" : "예약 추가"}
         </button>
       </div>
 
@@ -86,6 +108,16 @@ export default function RoomSyncPrototype() {
             <div key={i} className="border rounded p-3 shadow-sm">
               <p><strong>{r.name}</strong> ({r.platform})</p>
               <p>{r.room} - {format(new Date(r.date), "yyyy-MM-dd")}</p>
+              <div className="mt-2 flex gap-2">
+                <button
+                  onClick={() => handleEdit(i)}
+                  className="text-sm text-blue-600 border border-blue-600 rounded px-2 py-1 hover:bg-blue-50"
+                >수정</button>
+                <button
+                  onClick={() => handleDelete(i)}
+                  className="text-sm text-red-600 border border-red-600 rounded px-2 py-1 hover:bg-red-50"
+                >삭제</button>
+              </div>
             </div>
           ))
         )}
