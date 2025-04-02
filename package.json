@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-no-crash-calendar-fix",
+  "name": "roomsync-final-nonbreaking-calendar",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
