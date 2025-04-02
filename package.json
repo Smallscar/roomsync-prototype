@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-calendar-vercel-fix",
+  "name": "roomsync-calendar-vercel-ok",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -9,7 +9,6 @@
     "react-scripts": "5.0.1",
     "date-fns": "^2.30.0",
     "@fullcalendar/react": "^6.1.8",
-    "@fullcalendar/common": "^6.1.8",
     "@fullcalendar/daygrid": "^6.1.8",
     "@fullcalendar/interaction": "^6.1.8"
   },
