@@ -154,7 +154,7 @@ export default function RoomSyncPrototype() {
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
-            events={reservations.map(r => ({
+            events={reservations.filter(r => r.date && r.name && r.room).map(r => ({
               title: `${r.room} - ${r.name}`,
               date: r.date
             }))}

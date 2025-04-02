@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-reset-basic",
+  "name": "roomsync-no-crash-calendar-fix",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
