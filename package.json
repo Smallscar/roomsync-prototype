@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-tabs-complete",
+  "name": "roomsync-fixed-tabs-and-content",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
