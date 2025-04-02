@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-with-settings-tab",
+  "name": "roomsync-tabs-visible-ui",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
