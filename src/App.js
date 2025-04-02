@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
 export default function RoomSyncPrototype() {
   const [reservations, setReservations] = useState([]);
   const [form, setForm] = useState({ name: "", date: "", room: "", platform: "" });
   const [error, setError] = useState("");
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
+
+  const API_URL = "http://localhost:4000/reservations";
 
   // 미리 등록된 객실 목록
   const roomOptions = [
@@ -16,41 +18,59 @@ export default function RoomSyncPrototype() {
     "펜션 전체"
   ];
 
+  useEffect(() => {
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => setReservations(data));
+  }, []);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     setError("");
     const exists = reservations.some(
-      (r, index) => index !== editIndex && r.date === form.date && r.room.toLowerCase() === form.room.toLowerCase()
+      (r) => r.date === form.date && r.room.toLowerCase() === form.room.toLowerCase() && r.id !== editId
     );
     if (exists) {
       setError("중복 예약! 해당 날짜에 이미 예약이 있습니다.");
       return;
     }
-    if (editIndex !== null) {
-      const updated = [...reservations];
-      updated[editIndex] = form;
-      setReservations(updated);
-      setEditIndex(null);
+
+    if (editId !== null) {
+      const updated = { ...form, id: editId };
+      await fetch(`${API_URL}/${editId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated)
+      });
+      setReservations(prev => prev.map(r => (r.id === editId ? updated : r)));
+      setEditId(null);
     } else {
-      setReservations([...reservations, form]);
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      const newRes = await res.json();
+      setReservations([...reservations, newRes]);
     }
+
     setForm({ name: "", date: "", room: "", platform: "" });
   };
 
-  const handleEdit = (index) => {
-    setForm(reservations[index]);
-    setEditIndex(index);
+  const handleEdit = (reservation) => {
+    setForm(reservation);
+    setEditId(reservation.id);
   };
 
-  const handleDelete = (index) => {
-    const updated = reservations.filter((_, i) => i !== index);
-    setReservations(updated);
-    if (editIndex === index) {
+  const handleDelete = async (id) => {
+    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    setReservations(reservations.filter(r => r.id !== id));
+    if (editId === id) {
       setForm({ name: "", date: "", room: "", platform: "" });
-      setEditIndex(null);
+      setEditId(null);
     }
   };
 
@@ -96,7 +116,7 @@ export default function RoomSyncPrototype() {
           className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
           onClick={handleAdd}
         >
-          {editIndex !== null ? "예약 수정" : "예약 추가"}
+          {editId !== null ? "예약 수정" : "예약 추가"}
         </button>
       </div>
 
@@ -104,17 +124,17 @@ export default function RoomSyncPrototype() {
         {reservations.length === 0 ? (
           <p className="text-gray-500">등록된 예약이 없습니다.</p>
         ) : (
-          reservations.map((r, i) => (
-            <div key={i} className="border rounded p-3 shadow-sm">
+          reservations.map((r) => (
+            <div key={r.id} className="border rounded p-3 shadow-sm">
               <p><strong>{r.name}</strong> ({r.platform})</p>
               <p>{r.room} - {format(new Date(r.date), "yyyy-MM-dd")}</p>
               <div className="mt-2 flex gap-2">
                 <button
-                  onClick={() => handleEdit(i)}
+                  onClick={() => handleEdit(r)}
                   className="text-sm text-blue-600 border border-blue-600 rounded px-2 py-1 hover:bg-blue-50"
                 >수정</button>
                 <button
-                  onClick={() => handleDelete(i)}
+                  onClick={() => handleDelete(r.id)}
                   className="text-sm text-red-600 border border-red-600 rounded px-2 py-1 hover:bg-red-50"
                 >삭제</button>
               </div>

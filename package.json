@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-editable",
+  "name": "roomsync-api-version",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
