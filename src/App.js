@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import '@fullcalendar/common/main.css';
+import '@fullcalendar/daygrid/main.css';
 
 export default function RoomSyncPrototype() {
   const [reservations, setReservations] = useState([]);
@@ -75,72 +80,88 @@ export default function RoomSyncPrototype() {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">RoomSync - 예약 관리</h1>
 
-      <div className="border rounded p-4 mb-4 shadow-sm">
-        <input
-          className="w-full border p-2 mb-2 rounded"
-          placeholder="이름"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-        />
-        <input
-          className="w-full border p-2 mb-2 rounded"
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleChange}
-        />
-        <select
-          name="room"
-          value={form.room}
-          onChange={handleChange}
-          className="w-full border p-2 mb-2 rounded"
-        >
-          <option value="">객실 선택</option>
-          {roomOptions.map((room, idx) => (
-            <option key={idx} value={room}>{room}</option>
-          ))}
-        </select>
-        <input
-          className="w-full border p-2 mb-2 rounded"
-          placeholder="플랫폼 (예: 에어비앤비)"
-          name="platform"
-          value={form.platform}
-          onChange={handleChange}
-        />
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <button
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-          onClick={handleAdd}
-        >
-          {editId !== null ? "예약 수정" : "예약 추가"}
-        </button>
-      </div>
+      <div className="grid md:grid-cols-2 gap-6">
+        <div>
+          <div className="border rounded p-4 mb-4 shadow-sm">
+            <input
+              className="w-full border p-2 mb-2 rounded"
+              placeholder="이름"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+            />
+            <input
+              className="w-full border p-2 mb-2 rounded"
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+            />
+            <select
+              name="room"
+              value={form.room}
+              onChange={handleChange}
+              className="w-full border p-2 mb-2 rounded"
+            >
+              <option value="">객실 선택</option>
+              {roomOptions.map((room, idx) => (
+                <option key={idx} value={room}>{room}</option>
+              ))}
+            </select>
+            <input
+              className="w-full border p-2 mb-2 rounded"
+              placeholder="플랫폼 (예: 에어비앤비)"
+              name="platform"
+              value={form.platform}
+              onChange={handleChange}
+            />
+            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+            <button
+              className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+              onClick={handleAdd}
+            >
+              {editId !== null ? "예약 수정" : "예약 추가"}
+            </button>
+          </div>
 
-      <div className="space-y-2">
-        {reservations.length === 0 ? (
-          <p className="text-gray-500">등록된 예약이 없습니다.</p>
-        ) : (
-          reservations.map((r) => (
-            <div key={r.id} className="border rounded p-3 shadow-sm">
-              <p><strong>{r.name}</strong> ({r.platform})</p>
-              <p>{r.room} - {format(new Date(r.date), "yyyy-MM-dd")}</p>
-              <div className="mt-2 flex gap-2">
-                <button
-                  onClick={() => handleEdit(r)}
-                  className="text-sm text-blue-600 border border-blue-600 rounded px-2 py-1 hover:bg-blue-50"
-                >수정</button>
-                <button
-                  onClick={() => handleDelete(r.id)}
-                  className="text-sm text-red-600 border border-red-600 rounded px-2 py-1 hover:bg-red-50"
-                >삭제</button>
-              </div>
-            </div>
-          ))
-        )}
+          <div className="space-y-2">
+            {reservations.length === 0 ? (
+              <p className="text-gray-500">등록된 예약이 없습니다.</p>
+            ) : (
+              reservations.map((r) => (
+                <div key={r.id} className="border rounded p-3 shadow-sm">
+                  <p><strong>{r.name}</strong> ({r.platform})</p>
+                  <p>{r.room} - {format(new Date(r.date), "yyyy-MM-dd")}</p>
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      onClick={() => handleEdit(r)}
+                      className="text-sm text-blue-600 border border-blue-600 rounded px-2 py-1 hover:bg-blue-50"
+                    >수정</button>
+                    <button
+                      onClick={() => handleDelete(r.id)}
+                      className="text-sm text-red-600 border border-red-600 rounded px-2 py-1 hover:bg-red-50"
+                    >삭제</button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="border rounded shadow-sm p-4">
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={reservations.map(r => ({
+              title: `${r.room} - ${r.name}`,
+              date: r.date
+            }))}
+            height="auto"
+          />
+        </div>
       </div>
     </div>
   );
