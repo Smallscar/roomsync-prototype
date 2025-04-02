@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-tab-header-separated",
+  "name": "roomsync-separated-title-tabs",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
