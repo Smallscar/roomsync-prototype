@@ -1,6 +1,6 @@
 
 {
-  "name": "roomsync-mobile-responsive",
+  "name": "roomsync-with-settings-tab",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
